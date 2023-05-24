@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-kong
+  labels:
+    app: poc-kong
+spec:
+  selector:
+    matchLabels:
+      app: poc-kong # usado no selector do service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "poc-kong"
+    spec:
+      containers:
+        - name: poc-kong
+          image: "mnikkel/poc-kong:v1"
