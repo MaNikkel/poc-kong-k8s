@@ -4,9 +4,6 @@
 # configuration to add them, e.g.:
 # kubectl port-forward deploy/your-deployment-kong 8001:8001
 
-image:
-  repository: kong
-  tag: latest
 
 env:
   prefix: /kong_prefix/

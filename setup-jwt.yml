@@ -58,12 +58,11 @@ metadata:
   namespace: default
 stringData:
   algorithm: HS256
-  key: a36c3049b36249a3c9f8891cb127243c
+  key: wobaissuer
   kongCredType: jwt
-  secret: e71829c351aa4242c2719cbfbe671c09
+  secret: <secret>
 type: Opaque
-# use the following bearer token
-# eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJhMzZjMzA0OWIzNjI0OWEzYzlmODg5MWNiMTI3MjQzYyJ9.U8dOyd1978lmbWNk7gXHf7krDTjYKZanrVpayA0Lhug
+
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
