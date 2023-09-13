@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poc-kong
+  labels:
+    app: poc-kong
+spec:
+  selector:
+    matchLabels:
+      app: poc-kong # usado no selector do service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "poc-kong"
+    spec:
+      containers:
+        - name: poc-kong
+          image: "mnikkel/poc-kong:v1"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    ingress.kubernetes.io/service-upstream: "true"
+  name: poc-kong-service
+spec:
+  selector:
+    app: poc-kong
+  type: LoadBalancer
+  ports:
+    - name: poc-kong-service
+      port: 80
+      targetPort: 80
+      protocol: TCP
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: app-jwt
+plugin: jwt
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: admin
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: admin
+credentials:
+  - app-admin-jwt
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-admin-jwt
+  namespace: default
+stringData:
+  algorithm: HS256
+  key: a36c3049b36249a3c9f8891cb127243c
+  kongCredType: jwt
+  secret: e71829c351aa4242c2719cbfbe671c09
+type: Opaque
+# use the following bearer token
+# eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImFkbWluIiwiaXNzIjoiYWRtaW4taXNzdWVyIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.TZXtM_-PSWgpj6B93nPncggC_IwdGbt7SzSenm1ZNs2uBnONE2OEgC7j1PU-6jBInZTXK53Mei3eSXR15FXAFilV_CjnW7VxvaMsR-G587d0UUNAggVIH-M5T6UuiPBtj2uQnaila__OZcnmXis4qjlxb1CGir1V1xwaOBSfLZSsczqObhw4wf_84ShfZib3rO2b8hUOozA2tgTjKG4VB8ZWbEtC56CELpSHULKf8rvnNtYVibrfGAiT5B5HaIky_c-odc3HmcTkT8jCV1dqncJgUYidLe2G6beb4WfU-3H0FmNhAiUGJSmhCsocP2Dt7xIITFdBX4RJMpXEyiVd_w
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kong-demo-ingress
+  annotations:
+    kubernetes.io/ingress.class: kong
+    konghq.com/plugins: app-jwt
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: poc-kong-service
+                port:
+                  number: 80
