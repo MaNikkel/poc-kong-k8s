@@ -90,3 +90,21 @@ spec:
                 name: poc-kong-service
                 port:
                   number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kong-demo-ingress-public
+  namespace: poc
+spec:
+  ingressClassName: kong
+  rules:
+    - http:
+        paths:
+          - path: /login
+            pathType: Prefix
+            backend:
+              service:
+                name: poc-kong-service
+                port:
+                  number: 80
