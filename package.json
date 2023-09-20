@@ -1,0 +1,24 @@
+{
+  "name": "poc-kong-k8s",
+  "version": "1.0.0",
+  "description": "- Kind - Kubectl - Helm",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaNikkel/poc-kong-k8s.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MaNikkel/poc-kong-k8s/issues"
+  },
+  "homepage": "https://github.com/MaNikkel/poc-kong-k8s#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jwt-simple": "^0.5.6"
+  }
+}
